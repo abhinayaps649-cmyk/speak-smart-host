@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeakSmart Confidence Quest</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Space+Grotesk:wght@400;700&display=swap"
+        rel="stylesheet">
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="glow-bg"></div>
+    <div class="app-container">
+        <!-- Top HUD Panel -->
+        <header class="hud-panel">
+            <div class="logo">
+                <span class="logo-mark">⚡</span>
+                <div class="logo-text">
+                    <h1>SpeakSmart</h1>
+                    <h2>Confidence Quest</h2>
+                </div>
+            </div>
+
+            <div class="hud-metrics">
+                <div class="metric-segment">
+                    <span class="segment-label">LEVEL</span>
+                    <div class="level-badge" id="levelValue">1</div>
+                </div>
+
+                <div class="metric-segment xp-segment">
+                    <div class="xp-header">
+                        <span class="segment-label">EXPERIENCE</span>
+                        <span class="xp-text" id="xpText">0 / 100 XP</span>
+                    </div>
+                    <div class="xp-bar-container">
+                        <div class="xp-bar-fill" id="xpFill"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Content -->
+        <main class="dashboard-grid">
+            <!-- Left Column: Controls & Input -->
+            <section class="control-station glass-panel">
+                <div class="panel-header">
+                    <div class="dot red"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
+                    <h3>Mission Control</h3>
+                </div>
+
+                <div class="mission-params">
+                    <div class="input-group">
+                        <label>Difficulty / Time Limit</label>
+                        <div class="custom-select-wrapper">
+                            <select id="levelSelector" class="cyber-select">
+                                <option value="1">Level 1 - Beginner (60s)</option>
+                                <option value="2">Level 2 - Inter (120s)</option>
+                                <option value="3">Level 3 - Pro (180s)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Speaking Prompt</label>
+                        <div class="topic-box" id="topicDisplay">
+                            Ready for your next mission? Generate a topic to begin!
+                        </div>
+                        <button id="btnTopic" class="cyber-btn default-btn">
+                            <span class="btn-content">Generate Topic</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="action-station">
+                    <div class="timer-box" id="timerDisplay">01:00</div>
+                    <div class="action-buttons">
+                        <button id="btnStart" class="cyber-btn primary-btn btn-lg">
+                            <span class="btn-content">RECORD</span>
+                        </button>
+                        <button id="btnStop" class="cyber-btn danger-btn btn-lg" disabled>
+                            <span class="btn-content">STOP</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Analysis & Awards -->
+            <section class="analysis-station glass-panel">
+                <div class="panel-header">
+                    <h3>Real-Time Telemetry</h3>
+                    <div class="live-indicator" id="liveIndicator">LIVE</div>
+                </div>
+
+                <div class="telemetry-grid">
+                    <div class="data-card">
+                        <span class="data-label">Duration</span>
+                        <span class="data-value" id="valDuration">0.0s</span>
+                    </div>
+                    <div class="data-card">
+                        <span class="data-label">WPM</span>
+                        <span class="data-value" id="valWpm">0</span>
+                    </div>
+                    <div class="data-card warning" style="display: none;">
+                        <span class="data-label">Fillers</span>
+                        <span class="data-value" id="valFillers">0</span>
+                    </div>
+                    <div class="data-card highlight">
+                        <span class="data-label">Confidence</span>
+                        <span class="data-value" id="valConfidence">-</span>
+                    </div>
+                </div>
+
+                <div class="transcript-box">
+                    <div class="transcript-header">Live Transcript</div>
+                    <div class="transcript-content" id="speechText">
+                        Awaiting voice input...
+                    </div>
+                </div>
+
+                <div class="feedback-box" id="feedbackBox"
+                    style="display: none; margin-top: 15px; padding: 15px; background: rgba(0, 255, 255, 0.05); border: 1px solid rgba(0, 255, 255, 0.1); border-radius: 12px;">
+                    <h4 style="margin: 0 0 10px 0; color: #00f0ff; display: flex; align-items: center; gap: 8px;">
+                        <span>🤖</span> Coach Feedback
+                    </h4>
+                    <p id="coachFeedback"
+                        style="font-size: 0.95rem; line-height: 1.5; color: #e0e0e0; margin-bottom: 10px;"></p>
+                    <h5 style="margin: 0 0 5px 0; color: #ffd700;">Areas for Improvement:</h5>
+                    <ul id="improvementsList" style="margin: 0; padding-left: 20px; font-size: 0.9rem; color: #e0e0e0;">
+                    </ul>
+                </div>
+
+                <div class="achievements-section">
+                    <h3 class="section-title">Earned Badges</h3>
+                    <div class="badge-grid" id="badgeContainer">
+                        <div class="achievement-badge locked" id="badge-first">
+                            <div class="badge-icon">🎤</div>
+                            <span>First Words</span>
+                        </div>
+                        <div class="achievement-badge locked" id="badge-fast">
+                            <div class="badge-icon">⚡</div>
+                            <span>Pace Maker</span>
+                        </div>
+                        <div class="achievement-badge locked" id="badge-clean">
+                            <div class="badge-icon">💎</div>
+                            <span>Crystal Clear</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Toast Notifications Area -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

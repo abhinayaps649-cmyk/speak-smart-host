@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+env/
+.venv/
+
+# Environment Variables (CRITICAL)
+.env
+backend/.env
+
+# Logs and databases
+*.log
+flask.log
+
+# Temporary Audio files
+temp_recording.wav
+temp_recording.webm
+*.wav
+*.webm
+
+# OS files
+.DS_Store
+Thumbs.db
